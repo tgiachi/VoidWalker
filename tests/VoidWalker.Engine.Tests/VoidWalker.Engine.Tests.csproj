@@ -17,4 +17,9 @@
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\VoidWalker.Engine.Core\VoidWalker.Engine.Core.csproj" />
+      <ProjectReference Include="..\..\src\VoidWalker.Engine.Network\VoidWalker.Engine.Network.csproj" />
+    </ItemGroup>
+
 </Project>
