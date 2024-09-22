@@ -8,9 +8,7 @@ public static class AddDefaultJsonSettingsExtension
 {
     public static IServiceCollection AddDefaultJsonSettings(this IServiceCollection services, bool formatted = true)
     {
-        services.AddSingleton(
-            GetDefaultJsonSettings(formatted)
-        );
+        services.AddSingleton(GetDefaultJsonSettings(formatted));
 
         return services;
     }

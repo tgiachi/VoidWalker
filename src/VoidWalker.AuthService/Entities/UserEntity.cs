@@ -15,7 +15,7 @@ public class UserEntity : BaseDbEntity
 
     public bool IsEmailVerified { get; set; }
 
-    public bool IsActive { get; set; } 
+    public bool IsActive { get; set; }
 
     public virtual ICollection<RoleEntity> Roles { get; set; }
 }
