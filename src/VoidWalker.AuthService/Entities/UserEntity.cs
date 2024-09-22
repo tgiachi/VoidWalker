@@ -12,4 +12,10 @@ public class UserEntity : BaseDbEntity
     [MaxLength(200)] public string PasswordHash { get; set; }
 
     [MaxLength(200)] public string Email { get; set; }
+
+    public bool IsEmailVerified { get; set; }
+
+    public bool IsActive { get; set; } 
+
+    public virtual ICollection<RoleEntity> Roles { get; set; }
 }
