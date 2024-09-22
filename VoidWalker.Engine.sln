@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoidWalker.Engine.Network",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoidWalker.Engine.Tests", "tests\VoidWalker.Engine.Tests\VoidWalker.Engine.Tests.csproj", "{59A2E1AA-3417-4818-BCB6-2E6F8A4987F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoidWalker.AuthService", "src\VoidWalker.AuthService\VoidWalker.AuthService.csproj", "{80C05929-49D9-4B79-9FDB-2CD9053E4903}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoidWalker.Engine.Database", "src\VoidWalker.Engine.Database\VoidWalker.Engine.Database.csproj", "{0FABB283-CE2A-40C1-B612-E4EFF68C2B95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{59A2E1AA-3417-4818-BCB6-2E6F8A4987F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59A2E1AA-3417-4818-BCB6-2E6F8A4987F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59A2E1AA-3417-4818-BCB6-2E6F8A4987F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80C05929-49D9-4B79-9FDB-2CD9053E4903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C05929-49D9-4B79-9FDB-2CD9053E4903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C05929-49D9-4B79-9FDB-2CD9053E4903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C05929-49D9-4B79-9FDB-2CD9053E4903}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FABB283-CE2A-40C1-B612-E4EFF68C2B95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FABB283-CE2A-40C1-B612-E4EFF68C2B95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FABB283-CE2A-40C1-B612-E4EFF68C2B95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FABB283-CE2A-40C1-B612-E4EFF68C2B95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
