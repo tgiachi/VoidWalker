@@ -28,6 +28,7 @@
     <ItemGroup>
         <ProjectReference Include="..\VoidWalker.Engine.Core\VoidWalker.Engine.Core.csproj"/>
         <ProjectReference Include="..\VoidWalker.Engine.Database\VoidWalker.Engine.Database.csproj"/>
+        <ProjectReference Include="..\VoidWalker.Engine.Network\VoidWalker.Engine.Network.csproj" />
     </ItemGroup>
 
 </Project>

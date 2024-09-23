@@ -1,4 +1,8 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using VoidWalker.AuthService.Entities;
 using VoidWalker.AuthService.Interfaces;
 using VoidWalker.Engine.Core.Data;
@@ -47,7 +51,9 @@ public class LoginService : ILoginService
             return new JwtTokenResult(false, null, null);
         }
 
-        return new JwtTokenResult(true, "", DateTime.UtcNow.AddHours(1));
+        var token = await GenerateTokenAsync(user);
+
+        return new JwtTokenResult(true, token, DateTime.UtcNow.AddHours(1));
     }
 
     public async Task<Guid> RegisterUserAsync(string username, string password, string email, params string[] roles)
@@ -91,5 +97,43 @@ public class LoginService : ILoginService
 
 
         return user.Id;
+    }
+
+    private async Task<string> GenerateTokenAsync(UserEntity user, int expireHours = 24)
+    {
+        var userRoles = await _userRoleDao.QueryAsync(x => x.UserId == user.Id);
+
+        var roles = await _roleDao.QueryAsync(x => userRoles.Select(s => s.RoleId).Contains(x.Id));
+
+
+        var handler = new JwtSecurityTokenHandler();
+
+
+        var privateKey = Encoding.ASCII.GetBytes(_jwtConfig.PrivateKey);
+
+        var credentials = new SigningCredentials(
+            new SymmetricSecurityKey(privateKey),
+            SecurityAlgorithms.HmacSha256
+        );
+
+        var ci = new ClaimsIdentity();
+
+        ci.AddClaim(new Claim(ClaimTypes.Name, user.Username));
+        ci.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+
+        foreach (var role in roles)
+        {
+            ci.AddClaim(new Claim(ClaimTypes.Role, role.Name));
+        }
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            SigningCredentials = credentials,
+            Expires = DateTime.UtcNow.AddHours(expireHours),
+            Subject = ci
+        };
+
+        var token = handler.CreateToken(tokenDescriptor);
+        return handler.WriteToken(token);
     }
 }

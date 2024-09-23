@@ -3,7 +3,9 @@ using Npgsql;
 using Serilog;
 using VoidWalker.AuthService.Context;
 using VoidWalker.AuthService.Dao;
+using VoidWalker.AuthService.Hubs;
 using VoidWalker.AuthService.Interfaces;
+using VoidWalker.AuthService.Routes;
 using VoidWalker.AuthService.Seeds;
 using VoidWalker.AuthService.Service;
 using VoidWalker.Engine.Core.Data;
@@ -46,6 +48,8 @@ builder.Services.RegisterDbSeed<RoleAndUserSeed>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -81,6 +85,15 @@ app.MapGet(
     )
     .WithName("GetWeatherForecast")
     .WithOpenApi();
+
+
+app.MapHub<LoginHub>("login");
+
+var apiGroup = app.MapGroup("/api/v1");
+
+apiGroup
+    .MapVersionRoute()
+    .MapLoginRoute();
 
 app.Run();
 
