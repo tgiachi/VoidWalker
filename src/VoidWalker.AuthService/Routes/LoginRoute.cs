@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using VoidWalker.AuthService.Interfaces;
-using VoidWalker.Engine.Core.Data.Shared;
 using VoidWalker.Engine.Network.Packets;
 
 namespace VoidWalker.AuthService.Routes;
