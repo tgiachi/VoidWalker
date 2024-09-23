@@ -18,7 +18,7 @@ public static class LoginRoute
                 if (result.Success)
                 {
                     return Results.Ok(
-                        new ShardResponsePacket(result.Token, result.ExpiresAt.Value, new List<ShardObject>())
+                        new LoginResponsePacket(true, result.Token, result.ExpiresAt.Value, Guid.NewGuid().ToString())
                     );
                 }
 
