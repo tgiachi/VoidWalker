@@ -1,6 +1,3 @@
 namespace VoidWalker.Engine.Database.Data;
 
-public class SeedTypeData
-{
-    
-}
+public record SeedTypeData(Type SeedType);

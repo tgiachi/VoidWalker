@@ -13,5 +13,9 @@
         <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\VoidWalker.Engine.Core\VoidWalker.Engine.Core.csproj" />
+    </ItemGroup>
+
 
 </Project>

@@ -13,4 +13,11 @@ public static class RegisterDbMigrationMethodEx
 
         return services;
     }
+
+    public static IServiceCollection AddDbSeedService(this IServiceCollection services)
+    {
+        services.AddHostedService<AutoSeedHostedService>();
+
+        return services;
+    }
 }
