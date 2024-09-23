@@ -1,9 +1,13 @@
+using VoidWalker.Engine.Core.Extensions;
+using VoidWalker.Engine.Server.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.RegisterConfig<GameServiceConfig>(builder.Configuration, "Game");
+
 
 var app = builder.Build();
 
