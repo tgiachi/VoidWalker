@@ -1,3 +1,4 @@
+using ConfigurationSubstitution;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Serilog;
@@ -18,6 +19,12 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
+
+builder.Configuration
+    .AddEnvironmentVariables()
+    .EnableSubstitutions();
+
+
 builder.Services.AddLogging(loggingBuilder => loggingBuilder.ClearProviders().AddSerilog());
 
 builder.Services.AddTransient<ILoginService, LoginService>();
@@ -29,6 +36,10 @@ builder.Services.RegisterConfig<JwtConfigData>(builder.Configuration, "Jwt");
 builder.Services.AddDbContextFactory<AuthServiceDbContext>(
     options =>
     {
+        Log.Logger.Information(
+            "Connection string: {connectionString}",
+            builder.Configuration.GetConnectionString("DefaultConnection")
+        );
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 

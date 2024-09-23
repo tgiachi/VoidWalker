@@ -29,8 +29,8 @@ tasks:
   docker-auth:build:
     desc: "Build docker image"
     cmds:
-      - "docker build -t {{.IMAGE_NAME}} ."
-    deps: [ build ]
+      - "docker build -t {{.AUTH_IMAGE_NAME}} -f Dockerfile.auth-service ."
+    #deps: [ build ]
 
   docker-auth:run:
     desc: "Execute docker image"
