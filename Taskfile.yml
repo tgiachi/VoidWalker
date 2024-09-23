@@ -1,0 +1,45 @@
+version: '3'
+
+vars:
+  AUTH_SERVICE_IMAGE_NAME: "voidwalker-authservice:latest"
+  AUTH_SERVICE_PORT: 5001
+  AUTH_IMAGE_NAME: "voidwalker-authservice"
+
+tasks:
+
+  default:
+    desc: "Default task"
+
+  deps:
+    desc: "Install dependencies"
+    cmds:
+      - "dotnet restore"
+  clean:
+    desc: "Clean project"
+    cmds:
+      - "dotnet clean"
+    deps: [ deps ]
+
+  build:
+    desc: "Build project sln"
+    cmds:
+      - "dotnet build --configuration Release VoidWalker.Engine.sln"
+    deps: [ clean ]
+
+  docker-auth:build:
+    desc: "Build docker image"
+    cmds:
+      - "docker build -t {{.IMAGE_NAME}} ."
+    deps: [ build ]
+
+  docker-auth:run:
+    desc: "Execute docker image"
+    cmds:
+      - "docker run --name {{.AUTH_IMAGE_NAME}} -p {{.AUTH_SERVICE_PORT}}:8080 {{.AUTH_SERVICE_IMAGE_NAME}}"
+    deps: [ docker-auth:build, docker-auth:stop ]
+
+  docker-auth:stop:
+    desc: "Stop docker container"
+    cmds:
+      - "docker stop {{.AUTH_IMAGE_NAME}} || true"
+      - "docker rm {{.AUTH_IMAGE_NAME}} || true"
