@@ -1,9 +1,17 @@
+using Serilog;
 using VoidWalker.Engine.Core.Extensions;
 using VoidWalker.Engine.Network.Events;
 using VoidWalker.Engine.Server.Data;
 using VoidWalker.Engine.Server.Hubs;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLogging(opts => opts.ClearProviders().AddSerilog());
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
