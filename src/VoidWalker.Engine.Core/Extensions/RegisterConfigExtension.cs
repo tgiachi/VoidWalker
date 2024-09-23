@@ -20,7 +20,8 @@ public static class RegisterConfigExtension
             throw new ConfigSectionNotFoundException(sectionName);
         }
 
-        services.AddSingleton(config);
+
+        services.AddOptions<TConfig>().BindConfiguration(sectionName);
 
 
         return services;
