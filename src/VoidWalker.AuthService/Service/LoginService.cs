@@ -137,4 +137,6 @@ public class LoginService : ILoginService
         var token = handler.CreateToken(tokenDescriptor);
         return handler.WriteToken(token);
     }
+
+    public Task InitializeAsync() => Task.CompletedTask;
 }

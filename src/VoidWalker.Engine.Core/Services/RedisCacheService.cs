@@ -164,4 +164,6 @@ public class RedisCacheService : IRedisCacheService
             JsonSerializer.Serialize(message, AddDefaultJsonSettingsExtension.GetDefaultJsonSettings())
         );
     }
+
+    public Task InitializeAsync() => Task.CompletedTask;
 }
