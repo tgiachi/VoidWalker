@@ -1,0 +1,6 @@
+@VoidWalker.Engine.Server_HostAddress = http://localhost:5159
+
+GET {{VoidWalker.Engine.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
