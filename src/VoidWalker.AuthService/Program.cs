@@ -1,4 +1,18 @@
+using VoidWalker.AuthService.Context;
+using VoidWalker.AuthService.Interfaces;
+using VoidWalker.AuthService.Service;
+using VoidWalker.Engine.Core.Data;
+using VoidWalker.Engine.Core.Extensions;
+using VoidWalker.Engine.Database.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<ILoginService, LoginService>();
+
+
+builder.Services.RegisterConfig<JwtConfigData>(builder.Configuration, "Jwt");
+
+builder.Services.AddDbMigrationService<AuthServiceDbContext>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
