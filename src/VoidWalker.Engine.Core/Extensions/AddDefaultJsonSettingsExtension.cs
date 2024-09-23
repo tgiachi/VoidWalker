@@ -6,6 +6,8 @@ namespace VoidWalker.Engine.Core.Extensions;
 
 public static class AddDefaultJsonSettingsExtension
 {
+    private static JsonSerializerOptions? _jsonSerializerOptions;
+
     public static IServiceCollection AddDefaultJsonSettings(this IServiceCollection services, bool formatted = true)
     {
         services.AddSingleton(GetDefaultJsonSettings(formatted));
@@ -14,7 +16,7 @@ public static class AddDefaultJsonSettingsExtension
     }
 
     public static JsonSerializerOptions GetDefaultJsonSettings(bool formatted = true) =>
-        new()
+        _jsonSerializerOptions ??= new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
             WriteIndented = formatted,

@@ -10,6 +10,7 @@ using VoidWalker.AuthService.Routes;
 using VoidWalker.AuthService.Seeds;
 using VoidWalker.AuthService.Service;
 using VoidWalker.Engine.Core.Data;
+using VoidWalker.Engine.Core.Data.Auth;
 using VoidWalker.Engine.Core.Extensions;
 using VoidWalker.Engine.Database.Extensions;
 

@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using VoidWalker.AuthService.Entities;
 using VoidWalker.AuthService.Interfaces;
 using VoidWalker.Engine.Core.Data;
+using VoidWalker.Engine.Core.Data.Auth;
 using VoidWalker.Engine.Database.Interfaces.Dao;
 
 namespace VoidWalker.AuthService.Service;

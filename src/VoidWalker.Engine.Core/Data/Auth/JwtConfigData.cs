@@ -1,4 +1,4 @@
-namespace VoidWalker.Engine.Core.Data;
+namespace VoidWalker.Engine.Core.Data.Auth;
 
 public class JwtConfigData
 {
