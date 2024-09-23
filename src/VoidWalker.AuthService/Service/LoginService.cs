@@ -12,13 +12,22 @@ public class LoginService : ILoginService
 
     private readonly IBaseDataAccess<UserEntity> _userDao;
 
+    private readonly IBaseDataAccess<RoleEntity> _roleDao;
+
+    private readonly IBaseDataAccess<UserRoleEntity> _userRoleDao;
+
     private readonly JwtConfigData _jwtConfig;
 
 
-    public LoginService(ILogger<LoginService> logger, IBaseDataAccess<UserEntity> userDao, IOptions<JwtConfigData> jwtConfig)
+    public LoginService(
+        ILogger<LoginService> logger, IBaseDataAccess<UserEntity> userDao, IOptions<JwtConfigData> jwtConfig,
+        IBaseDataAccess<RoleEntity> roleDao, IBaseDataAccess<UserRoleEntity> userRoleDao
+    )
     {
         _logger = logger;
         _userDao = userDao;
+        _roleDao = roleDao;
+        _userRoleDao = userRoleDao;
         _jwtConfig = jwtConfig.Value;
     }
 
@@ -39,5 +48,48 @@ public class LoginService : ILoginService
         }
 
         return new JwtTokenResult(true, "", DateTime.UtcNow.AddHours(1));
+    }
+
+    public async Task<Guid> RegisterUserAsync(string username, string password, string email, params string[] roles)
+    {
+        var exists = await _userDao.GetSingleByAsync(x => x.Username == username || x.Email == email);
+
+        if (exists != null)
+        {
+            _logger.LogError("User '{username}' or email '{email}' already exists.", username, email);
+            throw new Exception("User already exists.");
+        }
+
+        var user = new UserEntity
+        {
+            Username = username,
+            Email = email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password)
+        };
+
+        await _userDao.AddAsync(user);
+
+
+        foreach (var roleName in roles)
+        {
+            var role = await _roleDao.GetSingleByAsync(x => x.Name == roleName);
+
+            if (role == null)
+            {
+                _logger.LogError("Role '{roleName}' not found.", roleName);
+                throw new Exception("Role not found.");
+            }
+
+            var userRole = new UserRoleEntity
+            {
+                UserId = user.Id,
+                RoleId = role.Id
+            };
+
+            await _userRoleDao.AddAsync(userRole);
+        }
+
+
+        return user.Id;
     }
 }

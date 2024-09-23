@@ -12,12 +12,12 @@ public class RoleAndUserSeed : IDbSeed
     private readonly IBaseDataAccess<UserRoleEntity> _userRoleDataAccess;
 
 
-    private readonly List<string> _roles = new()
-    {
+    private readonly List<string> _roles =
+    [
         "admin",
         "gm",
         "user"
-    };
+    ];
 
 
     public RoleAndUserSeed(
