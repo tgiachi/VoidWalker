@@ -1,4 +1,23 @@
 services:
+    game-service:
+        build:
+            context: .
+            dockerfile: Dockerfile.game-service
+        ports:
+            - "8001:5000"
+        depends_on:
+            - postgres
+            - redis
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - GAME_SERVER=voidwalker-postgres-1
+            - GAME_USER=postgres
+            - GAME_PASSWORD=password
+            - GAME_PORT=5432
+        links:
+            - redis
+            - postgres
+
     auth-service:
         build:
             context: .
