@@ -12,9 +12,14 @@ public class AuthServiceDbContext : BaseDbContext
 
     public DbSet<UserRoleEntity> UserRoles { get; set; }
 
+
+    public AuthServiceDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSnakeCaseNamingConvention();
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder

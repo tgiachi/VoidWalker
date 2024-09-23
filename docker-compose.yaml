@@ -10,7 +10,7 @@ services:
             - redis
         environment:
             - ASPNETCORE_ENVIRONMENT=Production
-            - AUTH_SERVER=postgres
+            - AUTH_SERVER=voidwalker-postgres-1
             - AUTH_USER=postgres
             - AUTH_PASSWORD=password
             - AUTH_PORT=5432
@@ -24,7 +24,6 @@ services:
 
     postgres:
         image: "postgres:alpine"
-
         environment:
             POSTGRES_USER: "postgres"
             POSTGRES_PASSWORD: "password"

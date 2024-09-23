@@ -36,15 +36,8 @@ builder.Services.RegisterConfig<JwtConfigData>(builder.Configuration, "Jwt");
 builder.Services.AddDbContextFactory<AuthServiceDbContext>(
     options =>
     {
-        Log.Logger.Information(
-            "Connection string: {connectionString}",
-            builder.Configuration.GetConnectionString("DefaultConnection")
-        );
-        var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-
-        options.UseNpgsql(dataSourceBuilder.Build())
-            .UseCamelCaseNamingConvention();
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+            .UseSnakeCaseNamingConvention();
     }
 );
 
