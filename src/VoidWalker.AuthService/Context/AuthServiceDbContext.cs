@@ -10,6 +10,8 @@ public class AuthServiceDbContext : BaseDbContext
 
     public DbSet<RoleEntity> Roles { get; set; }
 
+    public DbSet<UserRoleEntity> UserRoles { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSnakeCaseNamingConvention();

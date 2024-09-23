@@ -11,14 +11,14 @@ public static class RegisterConfigExtension
     )
         where TConfig : class
     {
-        var config = default(TConfig);
-        configuration.GetSection(sectionName).Bind(config);
-
-
-        if (config == null)
-        {
-            throw new ConfigSectionNotFoundException(sectionName);
-        }
+        // var config = default(TConfig);
+        // configuration.GetSection(sectionName).Bind(config);
+        //
+        //
+        // if (config == null)
+        // {
+        //     throw new ConfigSectionNotFoundException(sectionName);
+        // }
 
 
         services.AddOptions<TConfig>().BindConfiguration(sectionName);

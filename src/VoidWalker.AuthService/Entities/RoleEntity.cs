@@ -11,5 +11,5 @@ public class RoleEntity : BaseDbEntity
 
     [MaxLength(200)] public string? Description { get; set; }
 
-    public virtual ICollection<UserEntity> Users { get; set; }
+    public virtual ICollection<UserRoleEntity> Users { get; set; }
 }

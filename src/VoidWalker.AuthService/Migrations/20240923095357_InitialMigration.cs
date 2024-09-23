@@ -45,40 +45,48 @@ namespace VoidWalker.AuthService.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "role_entity_user_entity",
+                name: "user_roles",
                 columns: table => new
                 {
-                    roles_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    users_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_role_entity_user_entity", x => new { x.roles_id, x.users_id });
+                    table.PrimaryKey("pk_user_roles", x => x.id);
                     table.ForeignKey(
-                        name: "fk_role_entity_user_entity_roles_roles_id",
-                        column: x => x.roles_id,
+                        name: "fk_user_roles_roles_role_id",
+                        column: x => x.role_id,
                         principalTable: "roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_role_entity_user_entity_users_users_id",
-                        column: x => x.users_id,
+                        name: "fk_user_roles_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_role_entity_user_entity_users_id",
-                table: "role_entity_user_entity",
-                column: "users_id");
+                name: "ix_user_roles_role_id",
+                table: "user_roles",
+                column: "role_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_user_roles_user_id",
+                table: "user_roles",
+                column: "user_id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "role_entity_user_entity");
+                name: "user_roles");
 
             migrationBuilder.DropTable(
                 name: "roles");

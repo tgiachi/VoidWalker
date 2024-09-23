@@ -7,7 +7,7 @@ namespace VoidWalker.Engine.Database.Extensions;
 
 public static class RegisterSeedMethodEx
 {
-    public static IServiceCollection RegisterSeedService<TSeed>(this IServiceCollection services)
+    public static IServiceCollection RegisterDbSeed<TSeed>(this IServiceCollection services)
         where TSeed : IDbSeed
     {
         services.AddTransient(typeof(TSeed));

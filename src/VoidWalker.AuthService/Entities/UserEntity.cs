@@ -17,5 +17,5 @@ public class UserEntity : BaseDbEntity
 
     public bool IsActive { get; set; }
 
-    public virtual ICollection<RoleEntity> Roles { get; set; }
+    public virtual ICollection<UserRoleEntity> Roles { get; set; }
 }

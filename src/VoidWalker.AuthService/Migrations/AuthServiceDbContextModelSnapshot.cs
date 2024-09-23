@@ -22,25 +22,6 @@ namespace VoidWalker.AuthService.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("RoleEntityUserEntity", b =>
-                {
-                    b.Property<Guid>("RolesId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("roles_id");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("users_id");
-
-                    b.HasKey("RolesId", "UsersId")
-                        .HasName("pk_role_entity_user_entity");
-
-                    b.HasIndex("UsersId")
-                        .HasDatabaseName("ix_role_entity_user_entity_users_id");
-
-                    b.ToTable("role_entity_user_entity", (string)null);
-                });
-
             modelBuilder.Entity("VoidWalker.AuthService.Entities.RoleEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -120,21 +101,70 @@ namespace VoidWalker.AuthService.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("RoleEntityUserEntity", b =>
+            modelBuilder.Entity("VoidWalker.AuthService.Entities.UserRoleEntity", b =>
                 {
-                    b.HasOne("VoidWalker.AuthService.Entities.RoleEntity", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_role_entity_user_entity_roles_roles_id");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
-                    b.HasOne("VoidWalker.AuthService.Entities.UserEntity", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_roles");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_user_roles_role_id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_roles_user_id");
+
+                    b.ToTable("user_roles", (string)null);
+                });
+
+            modelBuilder.Entity("VoidWalker.AuthService.Entities.UserRoleEntity", b =>
+                {
+                    b.HasOne("VoidWalker.AuthService.Entities.RoleEntity", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_entity_user_entity_users_users_id");
+                        .HasConstraintName("fk_user_roles_roles_role_id");
+
+                    b.HasOne("VoidWalker.AuthService.Entities.UserEntity", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_roles_users_user_id");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("VoidWalker.AuthService.Entities.RoleEntity", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("VoidWalker.AuthService.Entities.UserEntity", b =>
+                {
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }
