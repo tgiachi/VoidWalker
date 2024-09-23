@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using VoidWalker.AuthService.Context;
 using VoidWalker.AuthService.Interfaces;
 using VoidWalker.AuthService.Service;
@@ -12,6 +14,19 @@ builder.Services.AddSingleton<ILoginService, LoginService>();
 
 builder.Services.RegisterConfig<JwtConfigData>(builder.Configuration, "Jwt");
 
+
+builder.Services.AddDbContextFactory<AuthServiceDbContext>(
+    options =>
+    {
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+
+        options.UseNpgsql(dataSourceBuilder.Build())
+            .UseCamelCaseNamingConvention();
+    }
+);
+
+builder.Services.RegisterDataAccess(typeof(AuthServiceDbContext));
 builder.Services.AddDbMigrationService<AuthServiceDbContext>();
 
 // Add services to the container.
