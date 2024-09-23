@@ -1,3 +1,5 @@
+using StackExchange.Redis;
+
 namespace VoidWalker.Engine.Core.Interfaces.Services;
 
 public interface IRedisCacheService : IVoidWalkerService
@@ -11,5 +13,9 @@ public interface IRedisCacheService : IVoidWalkerService
     Task<List<TEntity>> GetCacheKeysAsync<TEntity>(string prefix);
 
     Task<bool> DeleteCacheObjectAsync(string keyName);
+
+    Task SubscribeAsync<TEntity>(string channel, Action<RedisChannel, TEntity> handler) where TEntity : class;
+
+    Task PublishAsync<TEntity>(string channel, TEntity message) where TEntity : class;
 
 }

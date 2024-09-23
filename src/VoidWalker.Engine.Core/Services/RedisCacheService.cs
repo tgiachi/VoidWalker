@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 using StackExchange.Redis.Extensions.Core.Configuration;
 using StackExchange.Redis.Extensions.Core.Implementations;
 using VoidWalker.Engine.Core.Data.Configs;
@@ -136,5 +137,31 @@ public class RedisCacheService : IRedisCacheService
 
         var db = _redisConnectionPool.GetConnection().GetDatabase();
         return await db.KeyDeleteAsync(keyName);
+    }
+
+    public async Task SubscribeAsync<TEntity>(string channel, Action<RedisChannel, TEntity> handler) where TEntity : class
+    {
+        var sub = _redisConnectionPool.GetConnection().GetSubscriber();
+        await sub.SubscribeAsync(
+            channel,
+            (redisChannel, value) =>
+            {
+                var obj = JsonSerializer.Deserialize<TEntity>(
+                    value,
+                    AddDefaultJsonSettingsExtension.GetDefaultJsonSettings()
+                );
+                handler(redisChannel, obj);
+            }
+        );
+    }
+
+
+    public async Task PublishAsync<TEntity>(string channel, TEntity message) where TEntity : class
+    {
+        var sub = _redisConnectionPool.GetConnection().GetSubscriber();
+        await sub.PublishAsync(
+            channel,
+            JsonSerializer.Serialize(message, AddDefaultJsonSettingsExtension.GetDefaultJsonSettings())
+        );
     }
 }
