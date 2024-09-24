@@ -1,4 +1,4 @@
-namespace VoidWalker.Engine.Server.Data;
+namespace VoidWalker.Engine.Server.Data.Configs;
 
 public class GameServiceConfig
 {
