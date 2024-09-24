@@ -57,4 +57,7 @@ public static class DirectoriesUtils
 
     public static IEnumerable<string> GetFiles(DirectoryType directoryType, string searchPattern = "*") =>
         Directory.GetFiles(GetDirectoryPath(directoryType), searchPattern);
+
+    public static IEnumerable<string> GetFilesInRootDirectory(string searchPattern = "*") =>
+        Directory.GetFiles(GetRootDirectory(), searchPattern);
 }

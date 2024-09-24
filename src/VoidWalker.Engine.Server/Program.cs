@@ -1,5 +1,6 @@
 using MediatR;
 using Serilog;
+using VoidWalker.Engine.Core.Data.Json.TileSet;
 using VoidWalker.Engine.Core.Extensions;
 using VoidWalker.Engine.Core.Hosted;
 using VoidWalker.Engine.Network.Events;
@@ -49,9 +50,14 @@ builder.Services.AddMediatR(
 
 
 builder.Services
+    .RegisterJsonMap<TileSetObject>();
+
+
+builder.Services
     .RegisterVoidWalkerService<ISessionService, SessionService>()
     .RegisterVoidWalkerService<ITileSetService, TileSetService>()
-    .RegisterVoidWalkerService<IScriptEngineService, ScriptEngineService>();
+    .RegisterVoidWalkerService<IScriptEngineService, ScriptEngineService>()
+    .RegisterVoidWalkerService<IDataLoaderService, DataLoaderService>(true, 2000);
 
 
 builder.Services
