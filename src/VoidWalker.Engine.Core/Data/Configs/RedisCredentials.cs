@@ -1,3 +1,8 @@
 namespace VoidWalker.Engine.Core.Data.Configs;
 
-public record RedisCredentials(string Host, int Port, string Password);
+public class RedisCredentials
+{
+    public string Host { get; set; }
+    public int Port { get; set; }
+    public string Password { get; set; }
+}

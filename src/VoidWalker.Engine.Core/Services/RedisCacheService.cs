@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using StackExchange.Redis.Extensions.Core.Configuration;
 using StackExchange.Redis.Extensions.Core.Implementations;
@@ -16,22 +17,22 @@ public class RedisCacheService : IRedisCacheService
     private readonly RedisCredentials _redisCredentials;
 
 
-    public RedisCacheService(ILogger<RedisCacheService> logger, RedisCredentials redisCredentials)
+    public RedisCacheService(ILogger<RedisCacheService> logger, IOptions<RedisCredentials> redisCredentials)
     {
         _logger = logger;
-        _redisCredentials = redisCredentials;
+        _redisCredentials = redisCredentials.Value;
 
         _redisConnectionPool = new RedisConnectionPoolManager(
             new RedisConfiguration()
             {
-                Password = redisCredentials.Password,
+                Password = redisCredentials.Value.Password,
                 PoolSize = 10,
                 ConnectTimeout = 2000,
                 SyncTimeout = 3000,
                 ConfigurationOptions =
                 {
-                    Password = redisCredentials.Password,
-                    EndPoints = { $"{redisCredentials.Host}:{redisCredentials.Port}" },
+                    Password = redisCredentials.Value.Password,
+                    EndPoints = { $"{redisCredentials.Value.Host}:{redisCredentials.Value.Port}" },
                     KeepAlive = -1
                 }
             }
@@ -40,8 +41,8 @@ public class RedisCacheService : IRedisCacheService
 
         _logger.LogInformation(
             "Connecting to {Hostname}:{Port} with password",
-            redisCredentials.Host,
-            redisCredentials.Port
+            redisCredentials.Value.Host,
+            redisCredentials.Value.Port
         );
     }
 

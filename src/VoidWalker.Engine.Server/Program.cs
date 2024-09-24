@@ -2,6 +2,7 @@ using Serilog;
 using VoidWalker.Engine.Core.Extensions;
 using VoidWalker.Engine.Network.Events;
 using VoidWalker.Engine.Server.Data;
+using VoidWalker.Engine.Server.Hosted;
 using VoidWalker.Engine.Server.Hubs;
 
 Log.Logger = new LoggerConfiguration()
@@ -20,6 +21,10 @@ builder.Services.AddDefaultJsonSettings();
 
 builder.Services.AddSignalR();
 
+
+
+
+builder.Services.RegisterRedis(builder.Configuration);
 builder.Services.AddMediatR(
     opts =>
     {
@@ -28,6 +33,8 @@ builder.Services.AddMediatR(
     }
 );
 
+
+builder.Services.AddHostedService<GameServerHostedService>();
 
 builder.Services.RegisterConfig<GameServiceConfig>(builder.Configuration, "Game");
 
