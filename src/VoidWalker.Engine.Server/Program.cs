@@ -1,7 +1,10 @@
+using MediatR;
 using Serilog;
 using VoidWalker.Engine.Core.Extensions;
 using VoidWalker.Engine.Core.Hosted;
 using VoidWalker.Engine.Network.Events;
+using VoidWalker.Engine.Network.Extensions;
+using VoidWalker.Engine.Network.Packets;
 using VoidWalker.Engine.Server.Data;
 using VoidWalker.Engine.Server.Data.Configs;
 using VoidWalker.Engine.Server.Hosted;
@@ -75,6 +78,19 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("Cors");
+
+
+app.MapGet(
+    "/test/message",
+    async (IMediator mediator) =>
+    {
+        var message = new SendOutputEvent(null, new HelloResponsePacket().ToNetworkPacketData(), true);
+
+        await mediator.Publish(message);
+
+        return Results.Ok();
+    }
+);
 
 
 app.MapHub<GameHub>("game");

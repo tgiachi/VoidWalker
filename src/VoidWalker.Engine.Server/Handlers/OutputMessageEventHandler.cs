@@ -21,6 +21,7 @@ public class OutputMessageEventHandler : INotificationHandler<SendOutputEvent>
     {
         if (notification.IsBroadcast)
         {
+            _logger.LogInformation("Broadcasting message: {Message}", notification.Data.PacketType);
             await _hubContext.Clients.All.SendAsync(
                 "ReceiveMessage",
                 notification.Data,
@@ -29,6 +30,11 @@ public class OutputMessageEventHandler : INotificationHandler<SendOutputEvent>
         }
         else
         {
+            _logger.LogInformation(
+                "Sending message to session: {SessionId} Type: {Type}",
+                notification.SessionId,
+                notification.Data.PacketType
+            );
             await _hubContext.Clients.Client(notification.SessionId)
                 .SendAsync("ReceiveMessage", notification.Data, cancellationToken: cancellationToken);
         }
