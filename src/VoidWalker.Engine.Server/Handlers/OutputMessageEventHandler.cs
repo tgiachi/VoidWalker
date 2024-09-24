@@ -5,7 +5,7 @@ using VoidWalker.Engine.Server.Hubs;
 
 namespace VoidWalker.Engine.Server.Handlers;
 
-public class OutputMessageEventHandler : INotificationHandler<SendOutputEvent>
+public class OutputMessageEventHandler : INotificationHandler<SendOutputEvent>, INotificationHandler<SendListOutputEvent>
 {
     private readonly IHubContext<GameHub> _hubContext;
     private readonly ILogger _logger;
@@ -37,6 +37,14 @@ public class OutputMessageEventHandler : INotificationHandler<SendOutputEvent>
             );
             await _hubContext.Clients.Client(notification.SessionId)
                 .SendAsync("ReceiveMessage", notification.Data, cancellationToken: cancellationToken);
+        }
+    }
+
+    public async Task Handle(SendListOutputEvent notification, CancellationToken cancellationToken)
+    {
+        foreach (var packet in notification.Data)
+        {
+            await Handle(new SendOutputEvent(notification.SessionId, packet, notification.IsBroadcast), cancellationToken);
         }
     }
 }
