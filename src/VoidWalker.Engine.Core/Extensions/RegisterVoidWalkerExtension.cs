@@ -6,10 +6,6 @@ namespace VoidWalker.Engine.Core.Extensions;
 
 public static class RegisterVoidWalkerExtension
 {
-
-
-
-
     public static IServiceCollection RegisterVoidWalkerService<TService>(
         this IServiceCollection services, bool autoStart = true, int order = 0
     ) where TService : class, IVoidWalkerService

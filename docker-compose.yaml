@@ -13,6 +13,8 @@ services:
             - GAME_SERVER=voidwalker-postgres-1
             - GAME_USER=postgres
             - GAME_PASSWORD=password
+            - REDIS_SERVER=redis
+            - REDIS_PORT=6379
             - GAME_PORT=5432
         links:
             - redis
@@ -31,6 +33,8 @@ services:
             - ASPNETCORE_ENVIRONMENT=Production
             - AUTH_SERVER=voidwalker-postgres-1
             - AUTH_USER=postgres
+            - REDIS_SERVER=redis
+            - REDIS_PORT=6379
             - AUTH_PASSWORD=password
             - AUTH_PORT=5432
         links:

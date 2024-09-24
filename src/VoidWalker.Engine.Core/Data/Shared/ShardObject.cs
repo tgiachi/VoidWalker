@@ -2,6 +2,8 @@ namespace VoidWalker.Engine.Core.Data.Shared;
 
 public class ShardObject
 {
+    public string Id { get; set; }
+
     public string Name { get; set; }
 
     public string Description { get; set; }
@@ -10,18 +12,8 @@ public class ShardObject
 
     public string Type { get; set; }
 
+    public string Url { get; set; }
 
-    public ShardObject(string name, string description, string icon, string type)
-    {
-        Name = name;
-        Description = description;
-        Icon = icon;
-        Type = type;
-    }
-
-    public ShardObject()
-    {
-    }
 
     public override string ToString()
     {

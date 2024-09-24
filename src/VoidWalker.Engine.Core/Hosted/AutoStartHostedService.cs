@@ -26,7 +26,7 @@ public class AutoStartHostedService : IHostedService
     {
         foreach (var service in _services.OrderBy(x => x.Order))
         {
-            var serviceInstance = _serviceProvider.GetService(service.ImplementationType);
+            var serviceInstance = _serviceProvider.GetService(service.ServiceType);
 
             _logger.LogInformation("Starting service {Service}", service.ImplementationType.Name);
 
