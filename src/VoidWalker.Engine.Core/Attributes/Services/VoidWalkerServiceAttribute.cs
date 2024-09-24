@@ -1,4 +1,4 @@
-namespace VoidWalker.Engine.Core.Attributes;
+namespace VoidWalker.Engine.Core.Attributes.Services;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class VoidWalkerServiceAttribute(int order, bool isAutoStart = true) : Attribute

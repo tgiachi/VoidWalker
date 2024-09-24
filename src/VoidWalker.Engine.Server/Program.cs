@@ -11,6 +11,7 @@ using VoidWalker.Engine.Server.Hosted;
 using VoidWalker.Engine.Server.Hubs;
 using VoidWalker.Engine.Server.Interfaces;
 using VoidWalker.Engine.Server.Services;
+using VoidWalker.Engine.Server.Utils;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -18,6 +19,12 @@ Log.Logger = new LoggerConfiguration()
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+var rootDirectory = DirectoriesUtils.GetRootDirectory();
+
+Log.Logger.Information("Root directory: {rootDirectory}", rootDirectory);
+
 
 builder.Services.AddLogging(opts => opts.ClearProviders().AddSerilog());
 
@@ -41,7 +48,12 @@ builder.Services.AddMediatR(
 );
 
 
-builder.Services.RegisterVoidWalkerService<ISessionService, SessionService>();
+builder.Services
+    .RegisterVoidWalkerService<ISessionService, SessionService>()
+    .RegisterVoidWalkerService<ITileSetService, TileSetService>()
+    .RegisterVoidWalkerService<IScriptEngineService, ScriptEngineService>();
+
+
 builder.Services
     .AddHostedService<GameServerHostedService>()
     .AddHostedService<AutoStartHostedService>();

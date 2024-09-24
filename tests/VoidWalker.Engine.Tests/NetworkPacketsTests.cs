@@ -81,4 +81,22 @@ public class NetworkPacketsTests
 
         Assert.That(networkPacket.PacketType, Is.EqualTo(nameof(HelloResponsePacket)));
     }
+
+    [Test]
+    public void PongResponse_Serialize()
+    {
+        var packet = new PongResponsePacket();
+        var networkPacket = packet.ToNetworkPacketData();
+
+        Assert.That(networkPacket.PacketType, Is.EqualTo(nameof(PongResponsePacket)));
+    }
+
+    [Test]
+    public void PingRequest_Serialize()
+    {
+        var packet = new PingRequestPacket();
+        var networkPacket = packet.ToNetworkPacketData();
+
+        Assert.That(networkPacket.PacketType, Is.EqualTo(nameof(PingRequestPacket)));
+}
 }
