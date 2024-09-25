@@ -8,5 +8,4 @@ public class NetworkPacketData
 
     public string PacketData { get; set; }
 
-
 }
