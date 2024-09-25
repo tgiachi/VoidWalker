@@ -1,0 +1,54 @@
+services:
+    game-service:
+        build:
+            context: .
+            dockerfile: Dockerfile.game-service
+        ports:
+            - "8001:5000"
+        depends_on:
+            - postgres
+            - redis
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - GAME_SERVER=postgres
+            - GAME_USER=postgres
+            - GAME_PASSWORD=password
+            - REDIS_SERVER=redis
+            - REDIS_PORT=6388
+            - GAME_PORT=5480
+        links:
+            - redis
+            - postgres
+
+    auth-service:
+        build:
+            context: .
+            dockerfile: Dockerfile.auth-service
+        ports:
+            - "8000:5000"
+        depends_on:
+            - postgres
+            - redis
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - AUTH_SERVER=postgres
+            - AUTH_USER=postgres
+            - REDIS_SERVER=redis
+            - REDIS_PORT=6388
+            - AUTH_PASSWORD=password
+            - AUTH_PORT=5480
+        links:
+            - redis
+            - postgres
+    redis:
+        image: "redis:alpine"
+        ports:
+            - "6388:6379"
+
+    postgres:
+        image: "postgres:alpine"
+        environment:
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "password"
+        ports:
+            - "5480:5432"

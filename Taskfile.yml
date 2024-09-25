@@ -1,0 +1,81 @@
+version: '3'
+
+vars:
+  AUTH_SERVICE_IMAGE_NAME: "voidwalker-authservice:latest"
+  AUTH_SERVICE_PORT: 5001
+  AUTH_IMAGE_NAME: "voidwalker-authservice"
+  GAME_IMAGE_NAME: "voidwalker-gameservice"
+
+tasks:
+
+  default:
+    desc: "Default task"
+    deps: [ build, tests, docker-compose:build, docker-compose:up ]
+
+  tests:
+    desc: "Run tests"
+    cmds:
+      - "dotnet test"
+    deps: [ build ]
+
+  deps:
+    desc: "Install dependencies"
+    cmds:
+      - "dotnet restore"
+  clean:
+    desc: "Clean project"
+    cmds:
+      - "dotnet clean"
+    deps: [ deps ]
+
+  build:
+    desc: "Build project sln"
+    cmds:
+      - "dotnet build --configuration Release VoidWalker.Engine.sln"
+    deps: [ clean ]
+
+
+  docker:build:
+    desc: "Build docker image"
+    deps: [ docker-auth:build, docker-game:build ]
+
+  docker-auth:build:
+    desc: "Build docker image"
+    cmds:
+      - "docker build -t {{.AUTH_IMAGE_NAME}} -f Dockerfile.auth-service ."
+    #deps: [ build ]
+
+  docker-game:build:
+    desc: "Build docker image"
+    cmds:
+      - "docker build -t {{.GAME_IMAGE_NAME}} -f Dockerfile.game-service ."
+    #deps: [ build ]
+
+  docker-auth:run:
+    desc: "Execute docker image"
+    cmds:
+      - "docker run --name {{.AUTH_IMAGE_NAME}} -p {{.AUTH_SERVICE_PORT}}:8080 {{.AUTH_SERVICE_IMAGE_NAME}}"
+    deps: [ docker-auth:build, docker-auth:stop ]
+
+  docker-auth:stop:
+    desc: "Stop docker container"
+    cmds:
+      - "docker stop {{.AUTH_IMAGE_NAME}} || true"
+      - "docker rm {{.AUTH_IMAGE_NAME}} || true"
+
+  docker-compose:up:
+    desc: "Start docker-compose"
+    cmds:
+      - "docker-compose up -d"
+    deps: [ docker-compose:down ]
+
+  docker-compose:build:
+    desc: "Build docker-compose"
+    cmds:
+      - "docker-compose build"
+    deps: [ docker-compose:down ]
+
+  docker-compose:down:
+    desc: "Stop docker-compose"
+    cmds:
+      - "docker-compose down"

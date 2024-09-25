@@ -23,7 +23,7 @@ public interface IBaseDataAccess<TEntity> where TEntity : class, IBaseDbEntity
 
     IQueryable<TEntity> AsQueryable(CancellationToken cancellationToken = default);
 
-    Task<TEntity> GetSingleByAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+    Task<TEntity?> GetSingleByAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
     Task<long> CountAsync(CancellationToken cancellationToken = default);
 

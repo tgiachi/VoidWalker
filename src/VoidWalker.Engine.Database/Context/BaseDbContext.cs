@@ -4,9 +4,9 @@ using VoidWalker.Engine.Database.Interfaces.Entities;
 
 namespace VoidWalker.Engine.Database.Context;
 
-public class BaseDbContext : DbContext
+public abstract class BaseDbContext : DbContext
 {
-    public BaseDbContext(DbContextOptions options) : base(options)
+    protected BaseDbContext(DbContextOptions options) : base(options)
     {
     }
 
