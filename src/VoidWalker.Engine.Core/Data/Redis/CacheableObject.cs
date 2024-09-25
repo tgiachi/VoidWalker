@@ -12,7 +12,7 @@ public class CacheableObject<TData>
     }
 
 
-    private readonly TData _data = default(TData);
+    //private readonly TData _data = default(TData);
     private readonly IRedisCacheService _redisCacheService;
     private readonly int _defaultCacheTtl;
     private readonly string _baseNamespace;
@@ -47,11 +47,10 @@ public class CacheableObject<TData>
     {
         var cachedObject = await _redisCacheService.GetCacheObjectAsync<TData>(_baseNamespace);
         if (cachedObject != null)
+        {
             await _redisCacheService.DeleteCacheObjectAsync(_baseNamespace);
+        }
     }
 
-    public Task<TData> Get()
-    {
-        return GetDataValue();
-    }
+    public Task<TData> Get() => GetDataValue();
 }

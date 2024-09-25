@@ -1,7 +1,10 @@
 using System.Text.Json;
+using MediatR;
+using VoidWalker.Engine.Core.Data.Events.Data;
 using VoidWalker.Engine.Core.Data.Internal;
 using VoidWalker.Engine.Core.Services.Base;
 using VoidWalker.Engine.Server.Interfaces;
+using VoidWalker.Engine.Server.Types;
 using VoidWalker.Engine.Server.Utils;
 
 namespace VoidWalker.Engine.Server.Services;
@@ -10,13 +13,20 @@ public class DataLoaderService : BaseVoidWalkerService, IDataLoaderService
 {
     private readonly Dictionary<string, Type> _dataTypes = new();
 
+    private readonly Dictionary<string, List<Action<List<object>>>> _dataLoadedSubscribers = new();
+
     private const string _typeProperty = "$type";
 
+    private readonly IMediator _mediator;
 
-    private Dictionary<string, List<object>> _loadedData = new();
 
-    public DataLoaderService(ILogger<DataLoaderService> logger, List<JsonMapTypeData> jsonMaps) : base(logger)
+    private readonly Dictionary<string, List<object>> _loadedData = new();
+
+    public DataLoaderService(ILogger<DataLoaderService> logger, List<JsonMapTypeData> jsonMaps, IMediator mediator) : base(
+        logger
+    )
     {
+        _mediator = mediator;
         foreach (var jsonMap in jsonMaps)
         {
             _dataTypes.Add(jsonMap.Name, jsonMap.Type);
@@ -25,13 +35,80 @@ public class DataLoaderService : BaseVoidWalkerService, IDataLoaderService
 
     public override async Task InitializeAsync()
     {
-        var dataFiles = DirectoriesUtils.GetFilesInRootDirectory("*.json").ToList();
+        var dataFiles = DirectoriesUtils.GetFiles(DirectoryType.Data, "*.json").ToList();
 
         Logger.LogInformation("Loading data files: {DataFiles}", dataFiles.Count);
 
         foreach (var dataFile in dataFiles)
         {
             await LoadDataAsync(dataFile);
+        }
+
+        await BroadcastDataLoadedMessage();
+    }
+
+    public void SubscribeToDataLoaded<T>(string type, Action<List<T>> callBack) where T : class
+    {
+        if (_loadedData.ContainsKey(type))
+        {
+            if (_dataLoadedSubscribers.ContainsKey(type))
+            {
+                _dataLoadedSubscribers[type].Add(callBack as Action<List<object>>);
+            }
+            else
+            {
+                _dataLoadedSubscribers.Add(
+                    type,
+                    new List<Action<List<object>>>
+                    {
+                        callBack as Action<List<object>>
+                    }
+                );
+            }
+
+            callBack(_loadedData[type].Cast<T>().ToList());
+        }
+    }
+
+    private async Task BroadcastDataLoadedMessage()
+    {
+        foreach (var loadedData in _loadedData)
+        {
+            await _mediator.Publish(new DataLoadedEvent(loadedData.Key, loadedData.Value));
+        }
+
+        _dataLoadedSubscribers.ToList()
+            .ForEach(
+                subscriber =>
+                {
+                    if (_loadedData.ContainsKey(subscriber.Key))
+                    {
+                        subscriber.Value.ForEach(action => action(_loadedData[subscriber.Key]));
+                    }
+                }
+            );
+    }
+
+    private void ProcessElement(JsonElement element)
+    {
+        if (element.TryGetProperty(_typeProperty, out var typeProperty))
+        {
+            Logger.LogDebug("Processing element with type {Type}", typeProperty.GetString());
+            var typeToDeserialize = _dataTypes[typeProperty.GetString()];
+            var data = JsonSerializer.Deserialize(element.GetRawText(), typeToDeserialize);
+
+            if (_loadedData.ContainsKey(typeProperty.GetString()))
+            {
+                _loadedData[typeProperty.GetString()].Add(data);
+            }
+            else
+            {
+                _loadedData.Add(typeProperty.GetString(), new List<object> { data });
+            }
+        }
+        else
+        {
+            Logger.LogWarning("Type property not found in {DataFile}", element.GetRawText());
         }
     }
 
@@ -42,25 +119,7 @@ public class DataLoaderService : BaseVoidWalkerService, IDataLoaderService
 
         if (json.RootElement.ValueKind == JsonValueKind.Object)
         {
-            if (json.RootElement.TryGetProperty(_typeProperty, out var typeProperty))
-            {
-                var typeToDeserialize = _dataTypes[typeProperty.GetString()];
-
-                var data = JsonSerializer.Deserialize(json.RootElement.GetRawText(), typeToDeserialize);
-
-                if (_loadedData.ContainsKey(typeProperty.GetString()))
-                {
-                    _loadedData[typeProperty.GetString()].Add(data);
-                }
-                else
-                {
-                    _loadedData.Add(typeProperty.GetString(), new List<object> { data });
-                }
-            }
-            else
-            {
-                Logger.LogWarning("Type property not found in {DataFile}", dataFile);
-            }
+            ProcessElement(json.RootElement);
         }
 
 
@@ -68,25 +127,7 @@ public class DataLoaderService : BaseVoidWalkerService, IDataLoaderService
         {
             foreach (var element in json.RootElement.EnumerateArray())
             {
-                if (element.TryGetProperty(_typeProperty, out var typeProperty))
-                {
-                    var typeToDeserialize = _dataTypes[typeProperty.GetString()];
-
-                    var data = JsonSerializer.Deserialize(element.GetRawText(), typeToDeserialize);
-
-                    if (_loadedData.ContainsKey(typeProperty.GetString()))
-                    {
-                        _loadedData[typeProperty.GetString()].Add(data);
-                    }
-                    else
-                    {
-                        _loadedData.Add(typeProperty.GetString(), new List<object> { data });
-                    }
-                }
-                else
-                {
-                    Logger.LogWarning("Type property not found in {DataFile}", dataFile);
-                }
+                ProcessElement(element);
             }
         }
     }
