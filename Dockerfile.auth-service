@@ -25,6 +25,7 @@ FROM base AS final
 WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:8080
 ENV IS_IN_CONTAINER=true
+MODE prod
 COPY --from=publish /app/publish .
 # Set the entry point to run the application
 ENTRYPOINT ["dotnet", "VoidWalker.AuthService.dll"]
