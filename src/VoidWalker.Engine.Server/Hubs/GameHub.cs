@@ -42,14 +42,14 @@ public class GameHub : Hub
         var obj = JsonSerializer.Deserialize(packet.PacketData, packetType);
 
 
-        MethodInfo createMethod = GetType()
+        var createMethod = GetType()
             .MakeGenericType(packetType)
             .GetMethod(nameof(SendPacketEvent), BindingFlags.Public | BindingFlags.Static);
 
-        createMethod.Invoke(null, new[] { sessionId, obj, _mediator });
+        createMethod.Invoke(null, [sessionId, obj, _mediator]);
     }
 
-    private static void SendPacketEvent<TMessage>(TMessage message, string sessionId, IMessageBusService messageBusService)
+    public static void SendPacketEvent<TMessage>(TMessage message, string sessionId, IMessageBusService messageBusService)
         where TMessage : INetworkPacket
     {
         var incomingPacket = IncomingNetworkPacket<TMessage>.Create(sessionId, message);
