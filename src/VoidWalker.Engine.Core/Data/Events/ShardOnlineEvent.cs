@@ -1,8 +1,9 @@
-using VoidWalker.Engine.Core.Interfaces.Events;
+using Redbus.Events;
+
 
 namespace VoidWalker.Engine.Core.Data.Events;
 
-public class ShardOnlineEvent : IVoidWalkerEvent
+public class ShardOnlineEvent : EventBase
 {
 
     public string Id { get; set; }
