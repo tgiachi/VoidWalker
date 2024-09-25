@@ -3,6 +3,7 @@ using Serilog;
 using VoidWalker.Engine.Core.Data.Json.TileSet;
 using VoidWalker.Engine.Core.Extensions;
 using VoidWalker.Engine.Core.Hosted;
+using VoidWalker.Engine.Core.ScriptModules;
 using VoidWalker.Engine.Network.Events;
 using VoidWalker.Engine.Network.Extensions;
 using VoidWalker.Engine.Network.Packets;
@@ -11,6 +12,7 @@ using VoidWalker.Engine.Server.Data.Configs;
 using VoidWalker.Engine.Server.Hosted;
 using VoidWalker.Engine.Server.Hubs;
 using VoidWalker.Engine.Server.Interfaces;
+using VoidWalker.Engine.Server.ScriptModules;
 using VoidWalker.Engine.Server.Services;
 using VoidWalker.Engine.Server.Utils;
 
@@ -35,6 +37,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultJsonSettings();
 
 
+builder.Services.RegisterScriptModule<LoggerModule>();
+
+
 builder.Services.AddCors();
 builder.Services.AddSignalR();
 
@@ -56,8 +61,8 @@ builder.Services
 builder.Services
     .RegisterVoidWalkerService<ISessionService, SessionService>()
     .RegisterVoidWalkerService<ITileSetService, TileSetService>()
-    .RegisterVoidWalkerService<IScriptEngineService, ScriptEngineService>()
-    .RegisterVoidWalkerService<IDataLoaderService, DataLoaderService>(true, 2000);
+    .RegisterVoidWalkerService<IScriptEngineService, ScriptEngineService>(true, 101)
+    .RegisterVoidWalkerService<IDataLoaderService, DataLoaderService>(true, 100);
 
 
 builder.Services
