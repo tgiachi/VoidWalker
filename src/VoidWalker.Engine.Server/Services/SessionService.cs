@@ -1,4 +1,3 @@
-
 using VoidWalker.Engine.Core.Data.Events.Player;
 using VoidWalker.Engine.Core.Interfaces.Services;
 using VoidWalker.Engine.Core.Services.Base;
@@ -8,20 +7,21 @@ namespace VoidWalker.Engine.Server.Services;
 public class SessionService
     : BaseVoidWalkerService, ISessionService
 {
-    public SessionService(ILogger<SessionService> logger) : base(logger)
+    private readonly IMessageBusService _messageBusService;
+
+    public SessionService(ILogger<SessionService> logger, IMessageBusService messageBusService) : base(logger)
     {
-        Logger.LogInformation("Session service initialized.");
+        _messageBusService = messageBusService;
+        _messageBusService.Subscribe<PlayerConnectedEvent>(Handle);
     }
 
-    public Task Handle(PlayerConnectedEvent notification, CancellationToken cancellationToken)
+    public void Handle(PlayerConnectedEvent notification)
     {
         Logger.LogInformation("Player connected: {SessionId}", notification.SessionId);
-        return Task.CompletedTask;
     }
 
-    public Task Handle(PlayerDisconnectedEvent notification, CancellationToken cancellationToken)
+    public void Handle(PlayerDisconnectedEvent notification)
     {
         Logger.LogInformation("Player disconnected: {SessionId}", notification.SessionId);
-        return Task.CompletedTask;
     }
 }
