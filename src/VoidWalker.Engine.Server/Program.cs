@@ -60,7 +60,7 @@ builder.Services.AddAuthentication(
     .AddJwtBearer(
         options =>
         {
-            options.Authority = "Authority URL"; // TODO: Update URL
+            options.Authority = "Authority URL";
 
             options.Events = new JwtBearerEvents
             {
