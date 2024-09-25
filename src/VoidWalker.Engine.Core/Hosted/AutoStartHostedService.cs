@@ -2,6 +2,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using VoidWalker.Engine.Core.Data.Internal;
 using VoidWalker.Engine.Core.Interfaces.Services;
+using VoidWalker.Engine.Core.Interfaces.Services.Base;
 
 namespace VoidWalker.Engine.Core.Hosted;
 

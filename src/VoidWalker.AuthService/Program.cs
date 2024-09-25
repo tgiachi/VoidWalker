@@ -60,6 +60,21 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
 
+
+builder.Services.AddCors(
+    options => options.AddPolicy(
+        "Cors",
+        builder =>
+        {
+            builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins("http://localhost:3000");
+        }
+    )
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,7 +85,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("Cors");
 
 app.MapHub<LoginHub>("login");
 

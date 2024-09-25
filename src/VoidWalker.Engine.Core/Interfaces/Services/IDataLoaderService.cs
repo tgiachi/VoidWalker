@@ -1,4 +1,5 @@
 using VoidWalker.Engine.Core.Interfaces.Services;
+using VoidWalker.Engine.Core.Interfaces.Services.Base;
 
 namespace VoidWalker.Engine.Server.Interfaces;
 

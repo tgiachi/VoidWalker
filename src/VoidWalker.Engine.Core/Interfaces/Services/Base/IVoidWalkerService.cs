@@ -1,4 +1,4 @@
-namespace VoidWalker.Engine.Core.Interfaces.Services;
+namespace VoidWalker.Engine.Core.Interfaces.Services.Base;
 
 public interface IVoidWalkerService
 {

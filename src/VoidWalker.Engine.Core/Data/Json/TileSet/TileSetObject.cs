@@ -9,9 +9,6 @@ public class TileSetObject
 
     public string Texture { get; set; }
 
-    public int Width { get; set; }
-
-    public int Height { get; set; }
 
     public int TileWidth { get; set; }
 

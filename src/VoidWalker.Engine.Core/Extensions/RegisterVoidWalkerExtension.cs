@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using VoidWalker.Engine.Core.Data.Internal;
 using VoidWalker.Engine.Core.Interfaces.Services;
+using VoidWalker.Engine.Core.Interfaces.Services.Base;
 
 namespace VoidWalker.Engine.Core.Extensions;
 

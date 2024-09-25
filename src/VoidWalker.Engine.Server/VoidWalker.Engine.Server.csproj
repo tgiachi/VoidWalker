@@ -32,4 +32,8 @@
         <ProjectReference Include="..\VoidWalker.Engine.Network\VoidWalker.Engine.Network.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Interfaces\" />
+    </ItemGroup>
+
 </Project>

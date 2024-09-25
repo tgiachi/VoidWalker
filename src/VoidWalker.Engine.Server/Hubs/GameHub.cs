@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
-using VoidWalker.Engine.Server.Data.Events;
+using VoidWalker.Engine.Core.Data.Events.Player;
 using Wolverine;
 
 namespace VoidWalker.Engine.Server.Hubs;

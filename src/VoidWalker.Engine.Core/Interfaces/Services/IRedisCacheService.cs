@@ -1,4 +1,5 @@
 using StackExchange.Redis;
+using VoidWalker.Engine.Core.Interfaces.Services.Base;
 
 namespace VoidWalker.Engine.Core.Interfaces.Services;
 

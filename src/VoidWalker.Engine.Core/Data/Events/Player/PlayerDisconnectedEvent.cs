@@ -1,5 +1,5 @@
 using VoidWalker.Engine.Core.Interfaces.Events;
 
-namespace VoidWalker.Engine.Server.Data.Events;
+namespace VoidWalker.Engine.Core.Data.Events.Player;
 
 public record PlayerDisconnectedEvent(string SessionId) : IVoidWalkerEvent;

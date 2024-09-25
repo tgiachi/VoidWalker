@@ -1,6 +1,7 @@
 using VoidWalker.Engine.Core.Data;
 using VoidWalker.Engine.Core.Data.Auth;
 using VoidWalker.Engine.Core.Interfaces.Services;
+using VoidWalker.Engine.Core.Interfaces.Services.Base;
 
 namespace VoidWalker.AuthService.Interfaces;
 

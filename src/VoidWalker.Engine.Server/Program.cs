@@ -4,7 +4,9 @@ using Serilog;
 using VoidWalker.Engine.Core.Data.Json.TileSet;
 using VoidWalker.Engine.Core.Extensions;
 using VoidWalker.Engine.Core.Hosted;
+using VoidWalker.Engine.Core.Interfaces.Services;
 using VoidWalker.Engine.Core.ScriptModules;
+using VoidWalker.Engine.Core.ScriptModules.Services;
 using VoidWalker.Engine.Core.Utils;
 using VoidWalker.Engine.Network.Events;
 using VoidWalker.Engine.Network.Extensions;
@@ -13,6 +15,7 @@ using VoidWalker.Engine.Server.Data.Configs;
 using VoidWalker.Engine.Server.Hosted;
 using VoidWalker.Engine.Server.Hubs;
 using VoidWalker.Engine.Server.Interfaces;
+using VoidWalker.Engine.Server.Routes;
 using VoidWalker.Engine.Server.Services;
 using VoidWalker.Engine.Server.Utils;
 using Wolverine;
@@ -38,7 +41,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDefaultJsonSettings();
 
 
-builder.Services.RegisterScriptModule<LoggerModule>();
+builder.Services
+    .RegisterScriptModule<LoggerModule>()
+    .RegisterScriptModule<TileServiceModule>();
 
 
 builder.Host.UseWolverine(
@@ -49,37 +54,37 @@ builder.Host.UseWolverine(
 );
 
 
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(
-        options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }
-    )
-    .AddJwtBearer(
-        options =>
-        {
-            options.Authority = "Authority URL";
-
-            options.Events = new JwtBearerEvents
-            {
-                OnMessageReceived = context =>
-                {
-                    var accessToken = context.Request.Query["access_token"];
-
-                    var path = context.HttpContext.Request.Path;
-                    if (!string.IsNullOrEmpty(accessToken) &&
-                        (path.StartsWithSegments("/hubs/game")))
-                    {
-                        context.Token = accessToken;
-                    }
-
-                    return Task.CompletedTask;
-                }
-            };
-        }
-    );
+// builder.Services.AddAuthorization();
+// builder.Services.AddAuthentication(
+//         options =>
+//         {
+//             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//         }
+//     )
+//     .AddJwtBearer(
+//         options =>
+//         {
+//             options.Authority = "Authority URL";
+//
+//             options.Events = new JwtBearerEvents
+//             {
+//                 OnMessageReceived = context =>
+//                 {
+//                     var accessToken = context.Request.Query["access_token"];
+//
+//                     var path = context.HttpContext.Request.Path;
+//                     if (!string.IsNullOrEmpty(accessToken) &&
+//                         (path.StartsWithSegments("/hubs/game")))
+//                     {
+//                         context.Token = accessToken;
+//                     }
+//
+//                     return Task.CompletedTask;
+//                 }
+//             };
+//         }
+//     );
 
 builder.Services.AddCors();
 builder.Services.AddSignalR();
@@ -132,8 +137,8 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseAuthentication()
-    .UseAuthorization();
+// app.UseAuthentication()
+//     .UseAuthorization();
 
 app.UseHttpsRedirection();
 
@@ -152,6 +157,7 @@ app.MapGet(
     }
 );
 
+app.MapTilesRoutes();
 
 app.MapHub<GameHub>("hubs/game");
 

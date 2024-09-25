@@ -1,8 +1,7 @@
+using VoidWalker.Engine.Core.Data.Events.Player;
+using VoidWalker.Engine.Core.Interfaces.Services.Base;
 
-using VoidWalker.Engine.Core.Interfaces.Services;
-using VoidWalker.Engine.Server.Data.Events;
-
-namespace VoidWalker.Engine.Server.Interfaces;
+namespace VoidWalker.Engine.Core.Interfaces.Services;
 
 public interface ISessionService : IVoidWalkerService
 {
