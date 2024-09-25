@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using VoidWalker.Engine.Core.Attributes.Scripts;
 using VoidWalker.Engine.Core.Data.Json.TileSet;
 using VoidWalker.Engine.Core.Interfaces.Services;
-using VoidWalker.Engine.Server.Interfaces;
 
 namespace VoidWalker.Engine.Core.ScriptModules.Services;
 

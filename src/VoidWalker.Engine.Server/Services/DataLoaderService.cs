@@ -1,12 +1,11 @@
 using System.Text.Json;
-
 using VoidWalker.Engine.Core.Data.Events.Data;
 using VoidWalker.Engine.Core.Data.Internal;
+using VoidWalker.Engine.Core.Interfaces.Services;
 using VoidWalker.Engine.Core.Services.Base;
-using VoidWalker.Engine.Server.Interfaces;
 using VoidWalker.Engine.Server.Types;
 using VoidWalker.Engine.Server.Utils;
-using Wolverine;
+
 
 namespace VoidWalker.Engine.Server.Services;
 
@@ -18,16 +17,17 @@ public class DataLoaderService : BaseVoidWalkerService, IDataLoaderService
 
     private const string _typeProperty = "$type";
 
-    private readonly IMessageBus _mediator;
+    private readonly IMessageBusService _messageBusService;
 
 
     private readonly Dictionary<string, List<object>> _loadedData = new();
 
-    public DataLoaderService(ILogger<DataLoaderService> logger, List<JsonMapTypeData> jsonMaps, IMessageBus mediator) : base(
+    public DataLoaderService(
+        ILogger<DataLoaderService> logger, List<JsonMapTypeData> jsonMaps, IMessageBusService messageBusService
+    ) : base(
         logger
     )
     {
-        _mediator = mediator;
         foreach (var jsonMap in jsonMaps)
         {
             _dataTypes.Add(jsonMap.Name, jsonMap.Type);
@@ -75,7 +75,7 @@ public class DataLoaderService : BaseVoidWalkerService, IDataLoaderService
     {
         foreach (var loadedData in _loadedData)
         {
-            await _mediator.PublishAsync(new DataLoadedEvent(loadedData.Key, loadedData.Value));
+            _messageBusService.Publish(new DataLoadedEvent(loadedData.Key, loadedData.Value));
         }
 
         _dataLoadedSubscribers.ToList()

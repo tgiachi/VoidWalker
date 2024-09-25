@@ -4,3 +4,4 @@ GET {{VoidWalker.Engine.Server_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+

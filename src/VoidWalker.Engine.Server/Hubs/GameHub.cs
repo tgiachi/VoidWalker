@@ -1,25 +1,26 @@
 using Microsoft.AspNetCore.SignalR;
 using VoidWalker.Engine.Core.Data.Events.Player;
-using Wolverine;
+using VoidWalker.Engine.Core.Interfaces.Services;
+
 
 namespace VoidWalker.Engine.Server.Hubs;
 
 public class GameHub : Hub
 {
-    private readonly IMessageBus _mediator;
+    private readonly IMessageBusService _mediator;
 
-    public GameHub(IMessageBus mediator)
+    public GameHub(IMessageBusService mediator)
     {
         _mediator = mediator;
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await _mediator.PublishAsync(new PlayerDisconnectedEvent(Context.ConnectionId));
+        _mediator.Publish(new PlayerDisconnectedEvent(Context.ConnectionId));
     }
 
     public override async Task OnConnectedAsync()
     {
-        await _mediator.PublishAsync(new PlayerConnectedEvent(Context.ConnectionId));
+         _mediator.Publish(new PlayerConnectedEvent(Context.ConnectionId));
     }
 }

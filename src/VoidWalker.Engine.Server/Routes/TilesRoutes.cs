@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using VoidWalker.Engine.Core.Interfaces.Services;
-using VoidWalker.Engine.Server.Interfaces;
 
 namespace VoidWalker.Engine.Server.Routes;
 

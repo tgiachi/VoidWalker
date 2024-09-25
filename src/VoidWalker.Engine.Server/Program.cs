@@ -1,4 +1,3 @@
-using JasperFx.CodeGeneration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using VoidWalker.Engine.Core.Data.Json.TileSet;
@@ -12,13 +11,13 @@ using VoidWalker.Engine.Network.Events;
 using VoidWalker.Engine.Network.Extensions;
 using VoidWalker.Engine.Network.Packets;
 using VoidWalker.Engine.Server.Data.Configs;
+using VoidWalker.Engine.Server.Handlers;
 using VoidWalker.Engine.Server.Hosted;
 using VoidWalker.Engine.Server.Hubs;
-using VoidWalker.Engine.Server.Interfaces;
 using VoidWalker.Engine.Server.Routes;
 using VoidWalker.Engine.Server.Services;
 using VoidWalker.Engine.Server.Utils;
-using Wolverine;
+
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -44,14 +43,6 @@ builder.Services.AddDefaultJsonSettings();
 builder.Services
     .RegisterScriptModule<LoggerModule>()
     .RegisterScriptModule<TileServiceModule>();
-
-
-builder.Host.UseWolverine(
-    opts =>
-    {
-        opts.CodeGeneration.TypeLoadMode = EnvUtils.IsDevelopment() ? TypeLoadMode.Dynamic : TypeLoadMode.Static;
-    }
-);
 
 
 // builder.Services.AddAuthorization();
@@ -100,8 +91,11 @@ builder.Services
 builder.Services
     .RegisterVoidWalkerService<ISessionService, SessionService>()
     .RegisterVoidWalkerService<ITileSetService, TileSetService>()
+    .RegisterVoidWalkerService<IMessageBusService, MessageBusService>()
     .RegisterVoidWalkerService<IScriptEngineService, ScriptEngineService>(true, 101)
     .RegisterVoidWalkerService<IDataLoaderService, DataLoaderService>(true, 100);
+
+builder.Services.RegisterVoidWalkerService<OutputMessageEventHandler>();
 
 
 builder.Services
@@ -147,11 +141,11 @@ app.UseCors("Cors");
 
 app.MapGet(
     "/test/message",
-    async (IMessageBus mediator) =>
+    async (IMessageBusService mediator) =>
     {
         var message = new SendOutputEvent(null, new HelloResponsePacket().ToNetworkPacketData(), true);
 
-        await mediator.PublishAsync(message);
+        mediator.Publish(message);
 
         return Results.Ok();
     }

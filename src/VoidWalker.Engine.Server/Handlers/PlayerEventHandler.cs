@@ -1,6 +1,5 @@
 using VoidWalker.Engine.Core.Data.Events.Player;
 using VoidWalker.Engine.Core.Interfaces.Services;
-using VoidWalker.Engine.Server.Interfaces;
 
 namespace VoidWalker.Engine.Server.Handlers;
 
