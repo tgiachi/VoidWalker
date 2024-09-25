@@ -28,6 +28,8 @@ public class DataLoaderService : BaseVoidWalkerService, IDataLoaderService
         logger
     )
     {
+        _messageBusService = messageBusService;
+
         foreach (var jsonMap in jsonMaps)
         {
             _dataTypes.Add(jsonMap.Name, jsonMap.Type);
