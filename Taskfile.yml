@@ -4,6 +4,7 @@ vars:
   AUTH_SERVICE_IMAGE_NAME: "voidwalker-authservice:latest"
   AUTH_SERVICE_PORT: 5001
   AUTH_IMAGE_NAME: "voidwalker-authservice"
+  GAME_IMAGE_NAME: "voidwalker-gameservice"
 
 tasks:
 
@@ -33,10 +34,21 @@ tasks:
       - "dotnet build --configuration Release VoidWalker.Engine.sln"
     deps: [ clean ]
 
+
+  docker:build:
+    desc: "Build docker image"
+    deps: [ docker-auth:build, docker-game:build ]
+
   docker-auth:build:
     desc: "Build docker image"
     cmds:
       - "docker build -t {{.AUTH_IMAGE_NAME}} -f Dockerfile.auth-service ."
+    #deps: [ build ]
+
+  docker-game:build:
+    desc: "Build docker image"
+    cmds:
+      - "docker build -t {{.GAME_IMAGE_NAME}} -f Dockerfile.game-service ."
     #deps: [ build ]
 
   docker-auth:run:
