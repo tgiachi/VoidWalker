@@ -1,20 +1,21 @@
-using MediatR;
+using JasperFx.CodeGeneration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 using VoidWalker.Engine.Core.Data.Json.TileSet;
 using VoidWalker.Engine.Core.Extensions;
 using VoidWalker.Engine.Core.Hosted;
 using VoidWalker.Engine.Core.ScriptModules;
+using VoidWalker.Engine.Core.Utils;
 using VoidWalker.Engine.Network.Events;
 using VoidWalker.Engine.Network.Extensions;
 using VoidWalker.Engine.Network.Packets;
-using VoidWalker.Engine.Server.Data;
 using VoidWalker.Engine.Server.Data.Configs;
 using VoidWalker.Engine.Server.Hosted;
 using VoidWalker.Engine.Server.Hubs;
 using VoidWalker.Engine.Server.Interfaces;
-using VoidWalker.Engine.Server.ScriptModules;
 using VoidWalker.Engine.Server.Services;
 using VoidWalker.Engine.Server.Utils;
+using Wolverine;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -40,18 +41,51 @@ builder.Services.AddDefaultJsonSettings();
 builder.Services.RegisterScriptModule<LoggerModule>();
 
 
+builder.Host.UseWolverine(
+    opts =>
+    {
+        opts.CodeGeneration.TypeLoadMode = EnvUtils.IsDevelopment() ? TypeLoadMode.Dynamic : TypeLoadMode.Static;
+    }
+);
+
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(
+        options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }
+    )
+    .AddJwtBearer(
+        options =>
+        {
+            options.Authority = "Authority URL"; // TODO: Update URL
+
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) &&
+                        (path.StartsWithSegments("/hubs/game")))
+                    {
+                        context.Token = accessToken;
+                    }
+
+                    return Task.CompletedTask;
+                }
+            };
+        }
+    );
+
 builder.Services.AddCors();
 builder.Services.AddSignalR();
 
 
 builder.Services.RegisterRedis(builder.Configuration);
-builder.Services.AddMediatR(
-    opts =>
-    {
-        opts.RegisterServicesFromAssembly(typeof(SendOutputEvent).Assembly);
-        opts.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    }
-);
 
 
 builder.Services
@@ -98,6 +132,9 @@ if (app.Environment.IsDevelopment())
 }
 
 
+app.UseAuthentication()
+    .UseAuthorization();
+
 app.UseHttpsRedirection();
 
 app.UseCors("Cors");
@@ -105,18 +142,18 @@ app.UseCors("Cors");
 
 app.MapGet(
     "/test/message",
-    async (IMediator mediator) =>
+    async (IMessageBus mediator) =>
     {
         var message = new SendOutputEvent(null, new HelloResponsePacket().ToNetworkPacketData(), true);
 
-        await mediator.Publish(message);
+        await mediator.PublishAsync(message);
 
         return Results.Ok();
     }
 );
 
 
-app.MapHub<GameHub>("game");
+app.MapHub<GameHub>("hubs/game");
 
 
 app.Run();

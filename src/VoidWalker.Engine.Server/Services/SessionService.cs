@@ -1,4 +1,4 @@
-using MediatR;
+
 using VoidWalker.Engine.Core.Services.Base;
 using VoidWalker.Engine.Server.Data.Events;
 using VoidWalker.Engine.Server.Interfaces;

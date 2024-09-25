@@ -1,11 +1,11 @@
-using MediatR;
+
 using Microsoft.AspNetCore.SignalR;
 using VoidWalker.Engine.Network.Events;
 using VoidWalker.Engine.Server.Hubs;
 
 namespace VoidWalker.Engine.Server.Handlers;
 
-public class OutputMessageEventHandler : INotificationHandler<SendOutputEvent>, INotificationHandler<SendListOutputEvent>
+public class OutputMessageEventHandler
 {
     private readonly IHubContext<GameHub> _hubContext;
     private readonly ILogger _logger;
@@ -17,7 +17,7 @@ public class OutputMessageEventHandler : INotificationHandler<SendOutputEvent>, 
     }
 
 
-    public async Task Handle(SendOutputEvent notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(SendOutputEvent notification, CancellationToken cancellationToken)
     {
         if (notification.IsBroadcast)
         {
@@ -40,7 +40,7 @@ public class OutputMessageEventHandler : INotificationHandler<SendOutputEvent>, 
         }
     }
 
-    public async Task Handle(SendListOutputEvent notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(SendListOutputEvent notification, CancellationToken cancellationToken)
     {
         foreach (var packet in notification.Data)
         {

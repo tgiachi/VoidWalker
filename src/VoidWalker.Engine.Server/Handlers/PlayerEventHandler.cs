@@ -1,10 +1,9 @@
-using MediatR;
 using VoidWalker.Engine.Server.Data.Events;
 using VoidWalker.Engine.Server.Interfaces;
 
 namespace VoidWalker.Engine.Server.Handlers;
 
-public class PlayerEventHandler : INotificationHandler<PlayerConnectedEvent>, INotificationHandler<PlayerDisconnectedEvent>
+public class PlayerEventHandler
 {
     private readonly ISessionService _sessionService;
 
@@ -13,9 +12,9 @@ public class PlayerEventHandler : INotificationHandler<PlayerConnectedEvent>, IN
         _sessionService = sessionService;
     }
 
-    public Task Handle(PlayerConnectedEvent notification, CancellationToken cancellationToken) =>
-        _sessionService.Handle(notification, cancellationToken);
+    public async ValueTask Handle(PlayerConnectedEvent notification, CancellationToken cancellationToken) =>
+        await _sessionService.Handle(notification, cancellationToken);
 
-    public Task Handle(PlayerDisconnectedEvent notification, CancellationToken cancellationToken) =>
-        _sessionService.Handle(notification, cancellationToken);
+    public async ValueTask Handle(PlayerDisconnectedEvent notification, CancellationToken cancellationToken) =>
+        await _sessionService.Handle(notification, cancellationToken);
 }

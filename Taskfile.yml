@@ -9,6 +9,7 @@ tasks:
 
   default:
     desc: "Default task"
+    deps: [ build, tests, docker-compose:build, docker-compose:up ]
 
   tests:
     desc: "Run tests"
@@ -54,6 +55,12 @@ tasks:
     desc: "Start docker-compose"
     cmds:
       - "docker-compose up -d"
+    deps: [ docker-compose:down ]
+
+  docker-compose:build:
+    desc: "Build docker-compose"
+    cmds:
+      - "docker-compose build"
     deps: [ docker-compose:down ]
 
   docker-compose:down:
