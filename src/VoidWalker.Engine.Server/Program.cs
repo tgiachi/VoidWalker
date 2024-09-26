@@ -13,6 +13,7 @@ using VoidWalker.Engine.Server.Data.Configs;
 using VoidWalker.Engine.Server.Handlers;
 using VoidWalker.Engine.Server.Hosted;
 using VoidWalker.Engine.Server.Hubs;
+using VoidWalker.Engine.Server.MessageListeners;
 using VoidWalker.Engine.Server.Routes;
 using VoidWalker.Engine.Server.Services;
 using VoidWalker.Engine.Server.Utils;
@@ -94,6 +95,9 @@ builder.Services
     .RegisterVoidWalkerService<INetworkDispatcherService, NetworkDispatcherService>()
     .RegisterVoidWalkerService<IScriptEngineService, ScriptEngineService>(true, 101)
     .RegisterVoidWalkerService<IDataLoaderService, DataLoaderService>(true, 100);
+
+
+builder.Services.RegisterNetworkDispatcher<LoginRequestPacket, LoginMessageListener>();
 
 builder.Services.RegisterVoidWalkerService<OutputMessageEventHandler>();
 
