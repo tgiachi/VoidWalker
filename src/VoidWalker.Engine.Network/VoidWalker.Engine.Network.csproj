@@ -7,8 +7,15 @@
         <Version>0.0.1</Version>
     </PropertyGroup>
 
+
     <ItemGroup>
-      <ProjectReference Include="..\VoidWalker.Engine.Core\VoidWalker.Engine.Core.csproj" />
+        <PackageReference Include="Redbus" Version="1.0.8"/>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="Data\" />
+      <Folder Include="Extensions\" />
     </ItemGroup>
 
 </Project>

@@ -27,4 +27,8 @@
         <Folder Include="Data\Json\"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\VoidWalker.Engine.Network\VoidWalker.Engine.Network.csproj" />
+    </ItemGroup>
+
 </Project>

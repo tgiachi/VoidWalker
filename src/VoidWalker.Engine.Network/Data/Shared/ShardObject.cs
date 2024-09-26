@@ -1,4 +1,4 @@
-namespace VoidWalker.Engine.Core.Data.Shared;
+namespace VoidWalker.Engine.Network.Data.Shared;
 
 public class ShardObject
 {

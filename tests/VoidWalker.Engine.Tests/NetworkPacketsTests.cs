@@ -1,5 +1,5 @@
-using VoidWalker.Engine.Core.Data.Shared;
-using VoidWalker.Engine.Network.Extensions;
+using VoidWalker.Engine.Core.Extensions;
+using VoidWalker.Engine.Network.Data.Shared;
 using VoidWalker.Engine.Network.Packets;
 
 namespace VoidWalker.Engine.Tests;
@@ -98,5 +98,5 @@ public class NetworkPacketsTests
         var networkPacket = packet.ToNetworkPacketData();
 
         Assert.That(networkPacket.PacketType, Is.EqualTo(nameof(PingRequestPacket)));
-}
+    }
 }

@@ -1,7 +1,7 @@
 using VoidWalker.AuthService.Interfaces;
 using VoidWalker.Engine.Core.Data.Events;
-using VoidWalker.Engine.Core.Data.Shared;
 using VoidWalker.Engine.Core.Interfaces.Services;
+using VoidWalker.Engine.Network.Data.Shared;
 
 namespace VoidWalker.AuthService.Service;
 

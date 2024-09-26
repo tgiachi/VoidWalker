@@ -1,8 +1,8 @@
 using System.Text.Json;
-using VoidWalker.Engine.Core.Extensions;
+using VoidWalker.Engine.Network;
 using VoidWalker.Engine.Network.Interfaces;
 
-namespace VoidWalker.Engine.Network.Extensions;
+namespace VoidWalker.Engine.Core.Extensions;
 
 public static class PacketExtension
 {

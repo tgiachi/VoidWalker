@@ -8,7 +8,6 @@ using VoidWalker.Engine.Core.ScriptModules;
 using VoidWalker.Engine.Core.ScriptModules.Services;
 using VoidWalker.Engine.Core.Utils;
 using VoidWalker.Engine.Network.Events;
-using VoidWalker.Engine.Network.Extensions;
 using VoidWalker.Engine.Network.Packets;
 using VoidWalker.Engine.Server.Data.Configs;
 using VoidWalker.Engine.Server.Handlers;
@@ -92,6 +91,7 @@ builder.Services
     .RegisterVoidWalkerService<ISessionService, SessionService>()
     .RegisterVoidWalkerService<ITileSetService, TileSetService>()
     .RegisterVoidWalkerService<IMessageBusService, MessageBusService>()
+    .RegisterVoidWalkerService<INetworkDispatcherService, NetworkDispatcherService>()
     .RegisterVoidWalkerService<IScriptEngineService, ScriptEngineService>(true, 101)
     .RegisterVoidWalkerService<IDataLoaderService, DataLoaderService>(true, 100);
 
